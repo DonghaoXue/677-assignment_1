@@ -1,0 +1,91 @@
+---
+title: "677-assignment"
+author: "Donghao Xue"
+date: "02/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rstanarm)
+library(ggplot2)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Creating the function $\alpha(p)$
+
+```{r}
+
+alpha_p = function(n,m,p){
+  a= 0
+  for(k in m:n){
+    a = a+dbinom(k, size = n, p)
+  }
+  return(a)
+}
+
+```
+
+## Plot
+
+```{r}
+n = 100
+x1 = seq(0.4,1,by = 0.001)
+
+y1 = alpha_p(n,69,x1)
+y2 = alpha_p(n,73,x1)
+y3 = alpha_p(n,68,x1)
+y4 = alpha_p(n,74,x1)
+dat = data.frame(x1, y1, y2, y3, y4)
+
+r1 = c(0.6,0.6,0.8,0.8,0.6)
+r2 = c(0.05,0.95,0.95, 0.05, 0.05)
+rec = data.frame(x = r1, y = r2)
+
+
+ggplot(data =dat) +
+  geom_line(aes(x = x1, y = y1)) +
+  geom_line(aes(x = x1, y = y2))+ 
+  geom_path(aes(x = r1, y = r2), data = rec) +
+  xlab("p")+ ylab("alpha(p)")
+
+
+ggplot(data =dat) +
+  geom_line(aes(x = x1, y = y1))+
+  geom_line(aes(x = x1, y = y2))+
+  geom_line(aes(x = x1, y = y3), color = "red")+
+  geom_line(aes(x = x1, y = y4),  color = "red")+
+  geom_path(aes(x = r1, y = r2), data = rec) +
+  xlab("p")+ ylab("alpha(p)")
+```
+
+
+The two red lines in the second graph represent the function $\alpha(p)$ with the critical value m = 68 and m = 74 respectively. Both of them are either outside the bottom line or outside the top line. Therefore the critical value should be between 69 and 73.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
